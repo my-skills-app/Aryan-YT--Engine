@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package com.aryan.yt.engine.services.youtube.protos.params;
+
+option java_outer_classname = "YoutubeProtobufStreamParams";
+option java_multiple_files = false;
+option java_package = "com.aryan.yt.engine.services.youtube.protos.params";
+option optimize_for = LITE_RUNTIME;
+
+message YoutubeStreamParams {
+  int32 index = 1;
+}
