@@ -1,24 +1,38 @@
 # Aryan-YT--Engine 🚀
 
-A high-level, developer-friendly Android library for efficient YouTube stream metadata extraction. This library provides direct access to HLS, DASH, and progressive stream links in a clean JSON format.
+A high-level, developer-friendly Android library for efficient YouTube stream metadata extraction. Get HLS, DASH, and progressive stream links in a clean JSON format.
 
 ## Features ✨
 - **Simple API**: Initialize and extract data with just a few lines of code.
-- **Clean JSON Output**: Structured response optimized for mobile developers.
-- **Adaptive Bitrate Ready**: Prioritizes HLS/DASH manifest URLs for live streams.
-- **High Performance**: Built on top of the robust NewPipe Extractor engine.
+- **Clean JSON Output**: Structured response optimized for mobile apps.
+- **Adaptive Bitrate Ready**: Supports HLS/DASH manifest URLs for live streams.
+- **High Performance**: Optimized for fast extraction on Android.
 
 ---
 
 ## Installation 📦
 
 ### 1. Add JitPack repository
-In your **`settings.gradle`** file:
+Depending on your project type, choose one:
 
-```gradle
+#### For Kotlin DSL (`settings.gradle.kts`):
+```kotlin
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
+        google()
+        mavenCentral()
+        maven { url = uri("https://jitpack.io") } // ✅ Use equals and uri()
+    }
+}
+```
+
+#### For Groovy (`settings.gradle`):
+```groovy
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
         mavenCentral()
         maven { url 'https://jitpack.io' }
     }
@@ -26,32 +40,47 @@ dependencyResolutionManagement {
 ```
 
 ### 2. Add dependency
-In your app's **`build.gradle`** file:
+In your app's **`build.gradle.kts`** (or `build.gradle`):
 
 ```gradle
 dependencies {
-    implementation 'com.github.my-skills-app:Aryan-YT--Engine:595c3af'
+    // Current latest commit: f6e4d8d
+    implementation 'com.github.my-skills-app:Aryan-YT--Engine:f6e4d8d'
 }
+```
+
+### 3. Add Permissions 🛡️
+**IMPORTANT**: You MUST add the following permission to your **`AndroidManifest.xml`** or the library will fail with a "Permission Denied" error:
+
+```xml
+<uses-permission android:name="android.permission.INTERNET" />
+<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 ```
 
 ---
 
 ## Simple Usage 🛠️
 
-### Header Initialization
+### 1. Initialization
+Make sure to initialize the engine once (e.g., in your Activity `onCreate`):
+
 ```java
-// Initialize the engine once (e.g., in your Application or Activity onCreate)
+import com.aryan.yt.engine.AryanYT;
+
+// Initialize
 AryanYT.init();
 ```
 
-### Metadata Extraction
+### 2. Metadata Extraction
+Run extraction in a background thread:
+
 ```java
 new Thread(() -> {
     try {
         String videoUrl = "https://www.youtube.com/live/Nq2wYlWFucg";
         String jsonResult = AryanYT.extractJson(videoUrl);
         
-        // Use the JSON result in your app
+        // Use JSON in your app
         Log.d("AryanYT", jsonResult);
         
     } catch (Exception e) {
@@ -63,21 +92,21 @@ new Thread(() -> {
 ---
 
 ## JSON Response Format 📄
-The library returns a structured JSON object:
+The library returns data as follows:
 
 ```json
 {
-  "videoId": "xrnANY4uk-A",
-  "title": "Video Title",
+  "videoId": "Nq2wYlWFucg",
+  "title": "...",
   "status": "OK",
-  "isLive": false,
+  "isLive": true,
   "streams": {
-    "combined": [...],   // Video + Audio tracks
-    "videoOnly": [...],  // Progressive video tracks
-    "audioOnly": [...],  // Progressive audio tracks
+    "combined": [...],   
+    "videoOnly": [...],  
+    "audioOnly": [...],  
     "live": {
-       "hlsUrl": "...",  // Playlist URL (.m3u8)
-       "dashUrl": "..."  // Manifest URL (.mpd)
+       "hlsUrl": "...",  // Use this for Live Streams (.m3u8)
+       "dashUrl": "..."  // Use this for Live Streams (.mpd)
     }
   }
 }
@@ -85,7 +114,13 @@ The library returns a structured JSON object:
 
 ---
 
-## License 📜
-This project is licensed under the GPL-3.0 License - see the LICENSE file for details.
+## Troubleshooting 💡
+- **Error: Permission Denied**: Check if you added the `<uses-permission android:name="android.permission.INTERNET" />` to your manifest.
+- **Build Failure (KTS)**: Ensure you are using `maven { url = uri("https://jitpack.io") }` in your `settings.gradle.kts`.
 
-Developed with ❤️ by [Aryan](https://github.com/my-skills-app)
+---
+
+## License 📜
+GPL-3.0 License
+
+Developed by [Aryan](https://github.com/my-skills-app)
