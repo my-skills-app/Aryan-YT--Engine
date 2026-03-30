@@ -1,4 +1,4 @@
 jdk:
   - openjdk24
 install:
-  - ./gradlew :AryanYTEngine:assembleRelease
+  - ./gradlew publishToMavenLocal
